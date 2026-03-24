@@ -51,7 +51,7 @@
 
 -----
 
-## 💡 Update log
+## ✅ Update log
 <details>
   <summary>유지관리 및 개선을 위한 업데이트 목록은 여기를 확인하세요</summary>
   📢 AlgoBot 서비스 정상화 및 기능 업데이트 안내 (26. 03. 13)
