@@ -1,0 +1,7 @@
+.env
+.venv
+secrets.json
+ssh-key-2026-02-17.key
+*.key
+*.pem
+__pycache__/
