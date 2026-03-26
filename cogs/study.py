@@ -25,14 +25,14 @@ TIER_DATA = {
 class Study(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.data_file = "study_data.json" # 📂 데이터를 저장할 파일 이름
+        self.data_file = "study_data.json" # 데이터를 저장할 파일 이름
         self.members = {}
         self.alert_channel_id = None
         self.solve_alert_channel_id = None # 풀이 알림을 보낼 별도 채널
         self.announced_problems = [] # 공지된 문제 리스트
         self.solved_log = {}         # {유저ID: [해결한 문제들]}
         self.user_stats = {}         # {유저ID: {'tier': 0, 'class': 0}}
-        self.load_data() # 🤖 클래스가 생성될 때 저장된 데이터를 불러옵니다.
+        self.load_data() # 클래스가 생성될 때 저장된 데이터를 불러옵니다.
 
     # 데이터를 파일(study_data.json)에 저장하는 함수
     def save_data(self):
@@ -42,7 +42,7 @@ class Study(commands.Cog):
                     'members': {str(k): v for k, v in self.members.items()}, # ID는 문자열로 저장
                     'alert_channel_id': self.alert_channel_id,
                     'solve_alert_channel_id': self.solve_alert_channel_id,
-                    'announced_problems': self.announced_problems, # 이제 [{'pid': '1000', 'deadline': '...'}, ...] 형식
+                    'announced_problems': self.announced_problems, # [{'pid': '1000', 'deadline': '...'}, ...] 형식
                     'solved_log': {str(k): v for k, v in self.solved_log.items()}
                 }, f, ensure_ascii=False, indent=4)
         except Exception as e:
@@ -88,6 +88,7 @@ class Study(commands.Cog):
         self.daily_alert.cancel()
         self.check_solutions.cancel()
 
+
     # 1. /등록
     @app_commands.command(name="등록", description="백준 아이디를 봇에 등록합니다.")
     @app_commands.describe(handle="등록할 백준 아이디")
@@ -102,6 +103,7 @@ class Study(commands.Cog):
             await interaction.followup.send(f"✅ 등록 완료: **{handle}** ({tier_name})")
         else:
             await interaction.followup.send(f"❌ '{handle}' 계정을 찾을 수 없습니다.")
+
 
     # 2. /프로필
     @app_commands.command(name="프로필", description="내 정보 또는 다른 사용자의 정보를 확인합니다.")
@@ -241,6 +243,7 @@ class Study(commands.Cog):
         deadline_str = deadline_dt.strftime("%Y-%m-%d %H:%M:%S")
         announced_date_str = today.strftime("%m/%d")
         
+
         # 2. 새로운 문제를 덮어씌우지 않고 누적 업데이트 (이미 있다면 기한만 연장)
         for pid in p_ids:
             existing_p = next((p for p in self.announced_problems if p['pid'] == pid), None)
@@ -275,6 +278,10 @@ class Study(commands.Cog):
         await interaction.followup.send("✅ 공지 완료!", ephemeral=True)
         for i in range(len(description)):
             await msg.add_reaction(["1️⃣", "2️⃣"][i])
+
+
+    # 5. -> 명령어 삭제
+
 
     # 6. /랭킹 (스터디원 전체 순위)
     @app_commands.command(name="랭킹", description="스터디원들의 실력 순위를 확인합니다.")
@@ -395,6 +402,7 @@ class Study(commands.Cog):
         else:
             await interaction.followup.send(f"❌ `{problem_id}`번 문제를 찾을 수 없습니다.")
 
+
     # 9. /알림채널설정
     @app_commands.command(name="알림채널설정", description="밤 9시 알림 채널 지정")
     async def set_alert_channel(self, interaction: discord.Interaction):
@@ -403,6 +411,7 @@ class Study(commands.Cog):
         if not self.daily_alert.is_running():
             self.daily_alert.start()
         await interaction.response.send_message("✅ 알림 채널 설정 완료!")
+
 
     # 10. 밤 9시 알림
     @tasks.loop(time=time(hour=21, minute=0, tzinfo=timezone(timedelta(hours=9))))
@@ -415,6 +424,7 @@ class Study(commands.Cog):
     @daily_alert.before_loop
     async def before_daily_alert(self):
         await self.bot.wait_until_ready()
+
 
     # 11. /알림해제
     @app_commands.command(name="알림해제", description="설정된 밤 9시 생존 알림을 취소합니다.")
@@ -439,6 +449,10 @@ class Study(commands.Cog):
         if not self.check_solutions.is_running():
             self.check_solutions.start()
         await interaction.response.send_message("✅ 풀이 알림(감지) 채널 설정 완료!")
+
+
+    # 12. -> 명령어 삭제
+
 
     # 13. /도움말
     @app_commands.command(name="도움말", description="봇에서 사용할 수 있는 모든 명령어와 설명을 확인합니다.")
@@ -490,7 +504,7 @@ class Study(commands.Cog):
         embed.description = "\n\n".join(description_lines)
         await interaction.followup.send(embed=embed)
 
-    # 12. 5분마다 실행되는 풀이 감지기
+    # 15. 5분마다 실행되는 풀이 감지기
     @tasks.loop(minutes=5)
     async def check_solutions(self):
         # 1. 기한이 지난 문제 자동으로 목록에서 정리
@@ -554,7 +568,7 @@ class Study(commands.Cog):
     async def before_check_solutions(self):
         await self.bot.wait_until_ready()
 
-    # 13. 10분마다 실행되는 티어/클래스 상승 감지기
+    # 16. 10분마다 실행되는 티어/클래스 상승 감지기
     @tasks.loop(minutes=10)
     async def check_user_stats(self):
         # 알림 채널이 설정 안 되어있으면 종료
@@ -608,7 +622,7 @@ class Study(commands.Cog):
     async def before_check_user_stats(self):
         await self.bot.wait_until_ready()
 
-    # 15. /문제풀이현황
+    # 17. /문제풀이현황
     @app_commands.command(name="문제풀이현황", description="주간, 월간, 누적 공지문제 풀이 개수를 확인합니다.")
     async def solve_status(self, interaction: discord.Interaction):
         await interaction.response.defer()
