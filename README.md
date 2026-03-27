@@ -111,7 +111,7 @@
    ```
    **[실제 입력 예시]**
    ```bash
-   ssh -i "F:\GitHub\Discord_Study_Bot\ssh-key-2026-02-17.key" ubuntu@129.154.58.149
+   ssh -i "F:\GitHub\Discord_Algorthms_StudyBot\ssh-key-2026-02-17.key" ubuntu@129.154.58.149
    ```
    * *Are you sure you want to continue connecting (yes/no/[fingerprint])? 라고 물으면 `yes`를 치고 엔터를 누릅니다.*
 
@@ -128,8 +128,8 @@ sudo apt install -y python3 python3-pip python3-venv git
 
 **2) 깃허브에서 봇 소스코드 가져오기 및 폴더 이동**
 ```bash
-git clone https://github.com/내계정/Discord_Study_Bot.git
-cd ~/Discord_Study_Bot
+git clone https://github.com/내계정/Discord_Algorthms_StudyBot.git
+cd ~/Discord_Algorthms_StudyBot
 ```
 
 ---
@@ -199,9 +199,9 @@ python3 main.py
    [Service]
    Type=simple
    User=ubuntu
-   WorkingDirectory=/home/ubuntu/Discord_Study_Bot
-   Environment="PATH=/home/ubuntu/Discord_Study_Bot/venv/bin"
-   ExecStart=/home/ubuntu/Discord_Study_Bot/venv/bin/python main.py
+   WorkingDirectory=/home/ubuntu/Discord_Algorthms_StudyBot
+   Environment="PATH=/home/ubuntu/Discord_Algorthms_StudyBot/venv/bin"
+   ExecStart=/home/ubuntu/Discord_Algorthms_StudyBot/venv/bin/python main.py
    Restart=always
 
    [Install]

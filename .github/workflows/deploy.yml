@@ -8,22 +8,19 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 🚀 오라클 서버 접속 및 봇 업데이트
-        uses: appleboy/ssh-action@master
+      - name: Deploy to Oracle Server
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            cd ~/Discord_Study_Bot
+            cd ~/Discord_Algorthms_StudyBot
             git pull origin master
-            
-            # 1. 봇이 이미 켜져 있으면 재시작, 없으면 새로 시작 (에러 143 안 남!)
-            pm2 restart study-bot --update-env || pm2 start /home/ubuntu/Discord_Study_Bot/venv/bin/python3 --name "study-bot" -- main.py
-            
-            # 2. 현재 봇 상태 한 번 보여주기 (기분 좋게 초록색으로 마무리)
+            source venv/bin/activate
+            pip install -r requirements.txt
+            pm2 restart study-bot --update-env || pm2 start venv/bin/python --name "study-bot" -- main.py
             pm2 save
-            exit 0
