@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Oracle Server
-        uses: appleboy/ssh-action@v1.0.3
+      - name: 오라클 서버 접속 및 봇 업데이트
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -20,7 +20,13 @@ jobs:
           script: |
             cd ~/Discord_Algorthms_StudyBot
             git pull origin master
+
+            # 의존성 갱신
             source venv/bin/activate
             pip install -r requirements.txt
-            pm2 restart study-bot --update-env || pm2 start venv/bin/python --name "study-bot" -- main.py
+
+            # 봇 재시작 또는 최초 실행
+            pm2 restart study-bot --update-env || pm2 start /home/ubuntu/Discord_Algorthms_StudyBot/venv/bin/python3 --name "study-bot" -- main.py
+
             pm2 save
+            exit 0

@@ -177,7 +177,7 @@ pip install python-dotenv
 ```bash
 python3 main.py
 ```
-화면에 **"Logged in as BearBot"** 라는 말이 뜨고, 디스코드 서버에 봇이 온라인으로 나타나면 대성공입니다! 🎉
+화면에 **"Logged in as (봇 이름)"** 라는 말이 뜨고, 디스코드 서버에 봇이 온라인으로 나타나면 대성공입니다! 🎉
 
 확인했다면 **`Ctrl + C`**를 눌러서 봇을 잠시 꺼주세요. (터미널을 끄면 봇이 죽어버리기 때문에, 24시간 돌아가게 하는 마지막 세팅을 해야 합니다.)
 
@@ -220,7 +220,7 @@ python3 main.py
    ```bash
    sudo systemctl status bearbot
    ```
-   초록색으로 **`active (running)`** 이라고 떠 있다면, 이제 터미널 창을 닫으셔도 됩니다! 스터디원들과 봇을 즐기세요! 👏👏👏
+   초록색으로 **`active (running)`** 이라고 떠 있다면, 이제 터미널 창을 닫으셔도 됩니다!
 
 -----
 
