@@ -212,12 +212,24 @@ class Study(commands.Cog):
         else:
             await interaction.followup.send(f"❌ `{difficulty} + {category}` 조건에 맞는 문제가 없습니다.")
 
-    # 4. /공지 (에러 해결 핵심 부분!)
+    # 4. /공지
     @app_commands.command(name="공지", description="스터디 문제를 공지합니다.")
-    @app_commands.describe(기한="마감일 (예: 0316)", 문제1="문제 번호", 문제2="문제 번호 (선택)")
-    async def announce(self, interaction: discord.Interaction, 기한: str, 문제1: str, 문제2: str = None):
+    @app_commands.describe(
+        기한="마감일 (예: 0316)",
+        문제1="문제 번호",
+        문제2="문제 번호 (선택)",
+        문제3="문제 번호 (선택)"
+    )
+    async def announce(
+        self,
+        interaction: discord.Interaction,
+        기한: str,
+        문제1: str,
+        문제2: str = None,
+        문제3: str = None
+    ):
         await interaction.response.defer()
-        p_ids = [pid for pid in [문제1, 문제2] if pid and pid.isdigit()]
+        p_ids = [pid for pid in [문제1, 문제2, 문제3] if pid and pid.isdigit()]
         
         today = datetime.now()
         
@@ -243,7 +255,6 @@ class Study(commands.Cog):
         deadline_str = deadline_dt.strftime("%Y-%m-%d %H:%M:%S")
         announced_date_str = today.strftime("%m/%d")
         
-
         # 2. 새로운 문제를 덮어씌우지 않고 누적 업데이트 (이미 있다면 기한만 연장)
         for pid in p_ids:
             existing_p = next((p for p in self.announced_problems if p['pid'] == pid), None)
@@ -276,9 +287,9 @@ class Study(commands.Cog):
         embed = discord.Embed(title=f"📅 {today.strftime('%m/%d')} 📃오늘의 스터디 문제 공지 (~{기한})", description="\n\n".join(description), color=discord.Color.blue())
         msg = await interaction.channel.send(embed=embed)
         await interaction.followup.send("✅ 공지 완료!", ephemeral=True)
+        reaction_emojis = ["1️⃣", "2️⃣", "3️⃣"]
         for i in range(len(description)):
-            await msg.add_reaction(["1️⃣", "2️⃣"][i])
-
+            await msg.add_reaction(reaction_emojis[i])
 
     # 5. -> 명령어 삭제
 
